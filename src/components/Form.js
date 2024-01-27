@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState,useEffect} from "react";
 
 
 const FormUI = () => {
@@ -7,6 +7,27 @@ const FormUI = () => {
     const [productPrice, setProductPrice] = useState('');
     const [productList, setProductList] = useState([]);
     const [totalValue, setTotalValue]=useState(0);
+    const [dataLoaded,setDataLoaded]=useState(false);
+
+
+
+    useEffect(()=>{
+        const storedProducts = JSON.parse(localStorage.getItem('productList'));
+        const storedTotalValue = parseFloat(localStorage.getItem('totalValue'));
+        
+        
+        setProductList(storedProducts);
+        setTotalValue(storedTotalValue);
+        setDataLoaded(true);
+    },[]);
+
+    useEffect(()=>{
+        if (dataLoaded){
+            localStorage.setItem('productList', JSON.stringify(productList));
+            localStorage.setItem('totalValue',totalValue.toString());
+    
+        }
+    },[productList,totalValue,dataLoaded]);
 
 
 
@@ -38,6 +59,8 @@ const FormUI = () => {
         updatedProducts.splice(index,1);
         setProductList(updatedProducts);
     }
+
+    
 
     return (
 
